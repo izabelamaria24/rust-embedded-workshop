@@ -1,5 +1,8 @@
 # This file is used for configuring Cargo's behavior for your Rust project.
 
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+runner = "probe-rs run --chip RP2040"
+
 # This section is used for defining the configuration options for the build process.
 [build]
 # Specify the target triple we are building for (in our case, we are building
