@@ -23,7 +23,7 @@
 
 use defmt::*;
 use embassy_executor::Spawner;
-use embassy_time::Timer;
+use embassy_time::{Timer, Duration};
 use embedded_graphics::draw_target::DrawTarget;
 use embedded_graphics::geometry::Point;
 use embedded_graphics::mono_font::iso_8859_1::FONT_7X13_BOLD;
@@ -32,6 +32,7 @@ use embedded_graphics::pixelcolor::{Rgb565, RgbColor};
 use embedded_graphics::text::Text;
 use embedded_graphics::Drawable;
 use embedded_nov_2024::display::SPIDeviceInterface;
+use ds3231::Ds3231;
 use {defmt_rtt as _, panic_probe as _};
 
 const DISPLAY_FREQ: u32 = 64_000_000;
@@ -88,19 +89,16 @@ async fn main(_spawner: Spawner) {
     // ************************************************************************
 
     info!("Display initialization finished!");
+    
+    let i2c = I2c::new(I2C0, Config::default());
+    let mut rtc = Ds3231::new(i2c);
 
-    // Write welcome message
-    let style = MonoTextStyle::new(&FONT_7X13_BOLD, Rgb565::CYAN);
-    Text::new("Welcome to Rust Workshop!", Point::new(36, 190), style)
-        .draw(&mut display)
-        .unwrap();
-
-    // Wait a bit
-    Timer::after_secs(10).await;
-
-    // Clear display
-    display.clear(Rgb565::BLACK).unwrap();
-    loop {
-        Timer::after_secs(1).await;
+    match rtc.get_time().await {
+        Ok(time) => {
+            info!("Current time: {}:{}:{}", time.hours, time.minutes, time.second);
+        },
+        Err(e) => {
+            info!("Failed to read time: {:?}", e);
+        }
     }
 }

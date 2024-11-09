@@ -9,19 +9,29 @@
 use defmt::*;
 use embassy_executor::Spawner;
 use embassy_rp::usb::{Driver, InterruptHandler};
-use embassy_time::Timer;
+use embassy_time::{Timer, Duration};
+use embassy_rp::gpio::{AnyPin, Input, Level, Output, Pin, Pull};
 use {defmt_rtt as _, panic_probe as _};
 
-// TODO 2.1 : Write a task that blinks the LED connected to GPIO1.
+#[embassy_executor::task]
+async fn blink_1(pin: AnyPin) {
+    let mut led = Output::new(pin, Level::Low);
+
+    loop
+    {
+        led.set_high();
+        Timer::after_millis(150).await;
+        led.set_low();
+        Timer::after_millis(150).await;
+    }
+}
 
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
     let p = embassy_rp::init(Default::default());
+    
+    Timer::after(Duration::from_secs(5)).await;
+    defmt::println!("Hello world!");
 
-    // TODO 0 : Set the timer to (a)wait 5 seconds before printing
-    //          the "Hello, World!" message.
-
-    // TODO 1 : Print the "Hello, World!" message to the USB serial port.
-
-    // TODO 2.2 : Spawn the task that blinks the LED connected to GPIO1.
+    spawner.spawn(blink_1(p.PIN_1.degrade())).unwrap();
 }
