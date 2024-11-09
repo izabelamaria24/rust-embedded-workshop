@@ -7,7 +7,7 @@
 //!
 //! Keep in mind that the RGB LED is common anode (look at the figure in the README file).
 //!
-//! Hint: For displaying the color on the LED, PWM (Pulse Width Modulation) will need to be set up
+//! For displaying the color on the LED, PWM (Pulse Width Modulation) will need to be set up
 //! on the pin. Connect them to pins: GPIO0 (Red), GPIO1 (Green), and
 //! GPIO2 (Blue). (Hint: Pin 0 and 1 will share the same channel).
 
@@ -30,5 +30,5 @@ async fn main(spawner: Spawner) {
 
     // TODO 0 : Create the Config for the PWM that will drive the RGB LED.
 
-    // TODO 1 :
+    // TODO 1 : Modify the RGB values and loop through the configs to create a transition.
 }

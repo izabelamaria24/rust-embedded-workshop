@@ -68,3 +68,7 @@ path = "src/hello.rs"
 name = "color"
 path = "src/color.rs"
 
+[[bin]]
+name = "smart_clock"
+path = "src/smart_clock.rs"
+
