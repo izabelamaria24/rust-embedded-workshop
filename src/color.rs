@@ -5,7 +5,7 @@
 //! Your application should smoothly transition from one color to another. The colors will
 //! be displayed sequentially for 3 seconds each, with a gradual transition period of 1 second.
 //!
-//! Keep in mind that the RGB LED is common anode (look at the figure in the README file).
+//! Keep in mind that the RGB LED is common anode.
 //!
 //! For displaying the color on the LED, PWM (Pulse Width Modulation) will need to be set up
 //! on the pin. Connect them to pins: GPIO0 (Red), GPIO1 (Green), and
